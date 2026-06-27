@@ -6,6 +6,11 @@
   "sessionStart": {
     "skill": "program-notebook"
   },
+  "mcpServers": {
+    "program-notebook": {
+      "command": "./bin/check-notebook-mcp.ts"
+    }
+  },
   "interface": {
     "displayName": "Program Notebook",
     "shortDescription": "Check and maintain docs/program-notebook.md"

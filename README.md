@@ -1,6 +1,6 @@
 # opencode-program-notebook
 
-OpenCode 的 Program Notebook 插件、skill 和命令包。
+OpenCode 与 Kimi Code 的 Program Notebook 插件、skill 和命令包。
 
 这个仓库把项目中枢文档约定固定下来：`docs/program-notebook.md` 是入口索引和状态摘要，`docs/architecture/*.md` 是结构、数据流、CI、代码风格等专题展开层。插件只做检查、提醒和工具暴露，不自动写文档。
 
@@ -31,6 +31,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/open
 - `.kimi/skills/program-notebook/SKILL.md`：Kimi Code skill。
 - `.kimi/INSTALL.md`：Kimi Code 安装说明。
 - `bin/check-notebook.ts`：命令行检查入口。
+- `bin/check-notebook-mcp.ts`：Kimi Code MCP server 入口。
 - `lib/program-notebook-lib.ts`：可测试的文档检查逻辑。
 - `skills/program-notebook/SKILL.md`：OpenCode skill 正文。
 - `tests/program-notebook-lib.test.ts`：核心库 Bun 测试。
@@ -52,15 +53,17 @@ Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/open
 - `docs/architecture/03-ci-pipeline.md`：测试覆盖、CI 验证链路、质量门。
 - `docs/architecture/04-code-style.md`：代码风格、复杂模块、维护风险、重构建议。
 
-## OpenCode 安装
+## 安装
 
-克隆仓库到稳定位置：
+### OpenCode
+
+1. 克隆仓库到稳定位置：
 
 ```bash
 git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/opencode-program-notebook
 ```
 
-在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 中加入插件路径：
+2. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 中加入插件路径：
 
 ```jsonc
 {
@@ -71,16 +74,28 @@ git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/open
 }
 ```
 
-如需 `/check-notebook` 命令，安装命令文件：
+3. 如需 `/check-notebook` 命令，复制命令文件：
 
 ```bash
 mkdir -p ~/.config/opencode/commands
 cp ~/.config/opencode-program-notebook/.opencode/commands/check-notebook.md ~/.config/opencode/commands/check-notebook.md
 ```
 
-重启 OpenCode。OpenCode 不会热重载插件、skill 或命令。
+4. 重启 OpenCode。OpenCode 不会热重载插件、skill 或命令。
 
-## OpenCode 使用
+### Kimi Code
+
+1. 在 Kimi Code 中安装 plugin：
+
+```text
+/plugins install https://github.com/LycanW/opencode-program-notebook
+```
+
+2. 运行 `/reload` 或开启新会话，使 plugin 生效。
+
+## 使用
+
+### OpenCode
 
 在 OpenCode 中可直接调用：
 
@@ -94,48 +109,23 @@ cp ~/.config/opencode-program-notebook/.opencode/commands/check-notebook.md ~/.c
 请调用 check_notebook，并基于报告判断 notebook/docs 是否需要更新。
 ```
 
+### Kimi Code
+
+在 Kimi Code 中让 agent 调用工具：
+
+```text
+请调用 check_notebook，并基于报告判断 notebook/docs 是否需要更新。
+```
+
+也可以指定项目根目录：
+
+```text
+请调用 check_notebook，projectRoot 为 /path/to/project，并基于报告判断 notebook/docs 是否需要更新。
+```
+
 当任务涉及陌生代码库、跨模块改动、源码/配置/构建/测试/架构/数据流结构性变化时，agent 应加载 `program-notebook` skill。
 
 面向 agent 的自动部署、维护和发布步骤见 `AGENTS.md`。
-
-## Kimi Code 支持
-
-Kimi Code 可以通过 plugin 方式使用本仓库的 Program Notebook 纪律和检查能力。
-
-### 安装
-
-1. 克隆仓库到稳定位置：
-
-```bash
-git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/opencode-program-notebook
-```
-
-2. 进入仓库目录安装依赖：
-
-```bash
-cd ~/.config/opencode-program-notebook
-bun install
-```
-
-3. 在 Kimi Code 中从本地路径安装 plugin（把 `YOUR_USER` 换成实际用户名，或使用绝对路径）：
-
-```text
-/plugins install file:///home/YOUR_USER/.config/opencode-program-notebook
-```
-
-4. 运行 `/reload` 或开启新会话，使 plugin 生效。
-
-### 使用
-
-在需要检查 notebook/docs 状态时，让 agent 执行：
-
-```bash
-cd ~/.config/opencode-program-notebook && bun run check-notebook [项目根目录]
-```
-
-如果未指定项目根目录，默认检查当前工作目录。
-
-安装 plugin 后，Kimi Code 在新会话或 `/reload` 后会自动加载 `program-notebook` skill。
 
 ## 开发验证
 

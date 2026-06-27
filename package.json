@@ -8,7 +8,7 @@
     "check-notebook": "bin/check-notebook.ts"
   },
   "scripts": {
-    "test": "bun test tests/program-notebook-lib.test.ts tests/check-notebook-cli.test.ts",
+    "test": "bun test tests/program-notebook-lib.test.ts tests/check-notebook-cli.test.ts tests/check-notebook-mcp.test.ts",
     "check-notebook": "bun run bin/check-notebook.ts"
   },
   "dependencies": {

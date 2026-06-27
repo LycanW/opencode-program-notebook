@@ -19,7 +19,8 @@
 - `kimi.plugin.json` 是 Kimi Code plugin 清单。
 - `.kimi/skills/program-notebook/SKILL.md` 是给 Kimi Code 使用的 skill 正文。
 - `.kimi/INSTALL.md` 是给 Kimi Code agent 读取并执行的安装说明。
-- `bin/check-notebook.ts` 是命令行检查入口，Kimi Code 通过它调用检查逻辑。
+- `bin/check-notebook.ts` 是命令行检查入口。
+- `bin/check-notebook-mcp.ts` 是 Kimi Code MCP server 入口。
 - `lib/program-notebook-lib.ts` 存放可测试逻辑。
 - `skills/program-notebook/SKILL.md` 存放 OpenCode skill 正文。
 - `tests/program-notebook-lib.test.ts` 和 `tests/check-notebook-cli.test.ts` 存放 Bun 测试。
@@ -78,11 +79,9 @@ bun run check-notebook
 
 1. 让用户复制 README 中的 Kimi Code 安装提示给 agent。
 2. 或直接按 `.kimi/INSTALL.md` 执行安装。
-3. 克隆仓库到稳定目录，例如 `~/.config/opencode-program-notebook`。
-4. 在仓库目录运行 `bun install`。
-5. 在 Kimi Code 中运行 `/plugins install file:///home/USER/.config/opencode-program-notebook` 安装本地 plugin（把 `USER` 替换为实际用户名，或使用绝对路径）。
-6. 运行验证命令（含 `bun run check-notebook`）。
-7. 提醒用户运行 `/reload` 或开启新会话，使 plugin 生效。
+3. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/opencode-program-notebook` 安装 plugin。
+4. 提醒用户运行 `/reload` 或开启新会话，使 plugin 生效。
+5. 验证 `check_notebook` 工具可用。
 
 ## OpenCode 全局自动部署步骤
 
@@ -110,21 +109,7 @@ bun run check-notebook
 ## Kimi Code 全局自动部署步骤
 
 1. 确认 `bun` 已安装；未安装时提示用户安装。
-2. 确认 `~/.config/opencode-program-notebook/.git` 是否存在。
-   - 如果存在，进入该目录并拉取最新 `main`。
-   - 如果不存在，克隆仓库到 `~/.config/opencode-program-notebook`。
-3. 如果目录存在但不是 git 仓库，不要删除用户文件；停下来询问用户如何处理。
-4. 在仓库目录运行 `bun install`。
-5. 在仓库目录运行 `bun test`。
-6. 在仓库目录运行 `bun run check-notebook`。
-7. 在 Kimi Code 中运行 `/plugins install file:///home/USER/.config/opencode-program-notebook`（路径按实际目录替换）。
-8. 提醒用户运行 `/reload` 或开启新会话。
-9. 不要覆盖用户已有配置、skill、plugin 或代理指南。
-
-## Kimi Code 项目级自动部署步骤
-
-1. 把仓库克隆到项目内稳定目录，例如 `tools/opencode-program-notebook`。
-2. 在克隆目录运行 `bun install`。
-3. 在 Kimi Code 中运行 `/plugins install file:///absolute/path/to/tools/opencode-program-notebook` 安装本地 plugin（路径按实际目录替换）。
-4. 在克隆目录运行验证命令（含 `bun run check-notebook`）。
-5. 提醒用户运行 `/reload` 或开启新会话，使 plugin 生效。
+2. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/opencode-program-notebook`。
+3. 提醒用户运行 `/reload` 或开启新会话。
+4. 调用 `check_notebook` 工具验证可用性。
+5. 不要覆盖用户已有配置、skill、plugin 或代理指南。
