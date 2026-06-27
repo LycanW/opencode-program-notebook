@@ -13,7 +13,7 @@ function send(message: unknown) {
   const data = header + json
   try {
     writeSync(1, Buffer.from(data, "utf8"))
-    log(`sent: ${message}`)
+    log(`sent: ${json.slice(0, 120)}`)
   } catch (error) {
     log(`send failed: ${error instanceof Error ? error.message : String(error)}`)
   }
@@ -102,23 +102,82 @@ log("mcp server started")
 let buffer = ""
 let expectedLength: number | null = null
 
+function findHeaderEnd(buf: string): { index: number; separatorLength: number } | undefined {
+  for (const [sep, len] of [["\r\n\r\n", 4], ["\n\n", 2]] as const) {
+    const idx = buf.indexOf(sep)
+    if (idx !== -1) return { index: idx, separatorLength: len }
+  }
+  return undefined
+}
+
+function tryParseRawJson(buf: string): { request: any; rest: string } | undefined {
+  // Some MCP clients send newline-delimited JSON without Content-Length.
+  // Try to find a complete JSON object by scanning for closing brace balance.
+  let depth = 0
+  let inString = false
+  let escape = false
+  for (let i = 0; i < buf.length; i++) {
+    const ch = buf[i]
+    if (escape) {
+      escape = false
+      continue
+    }
+    if (ch === "\\") {
+      escape = true
+      continue
+    }
+    if (ch === '"') {
+      inString = !inString
+      continue
+    }
+    if (inString) continue
+    if (ch === "{") depth++
+    if (ch === "}") {
+      depth--
+      if (depth === 0) {
+        const json = buf.slice(0, i + 1)
+        try {
+          return { request: JSON.parse(json), rest: buf.slice(i + 1).replace(/^\s+/, "") }
+        } catch {
+          return undefined
+        }
+      }
+    }
+  }
+  return undefined
+}
+
 process.stdin.on("data", (chunk: Buffer) => {
   buffer += chunk.toString("utf8")
-  log(`stdin chunk received, buffer length: ${buffer.length}`)
+  log(`stdin chunk received, buffer length: ${buffer.length}, preview: ${JSON.stringify(buffer.slice(0, 120))}`)
 
   while (true) {
     if (expectedLength === null) {
-      const headerEnd = buffer.indexOf("\r\n\r\n")
-      if (headerEnd === -1) return
-      const header = buffer.slice(0, headerEnd)
-      const match = header.match(/Content-Length:\s*(\d+)/i)
-      if (!match) {
-        log(`invalid header: ${header}`)
-        return
+      const header = findHeaderEnd(buffer)
+      if (header) {
+        const headerText = buffer.slice(0, header.index)
+        const match = headerText.match(/Content-Length:\s*(\d+)/i)
+        if (match) {
+          expectedLength = parseInt(match[1], 10)
+          buffer = buffer.slice(header.index + header.separatorLength)
+          log(`expecting body length: ${expectedLength}`)
+        } else {
+          log(`invalid header: ${JSON.stringify(headerText)}`)
+          return
+        }
+      } else {
+        // Fallback: try newline-delimited JSON
+        const raw = tryParseRawJson(buffer)
+        if (!raw) return
+        buffer = raw.rest
+        log(`parsed raw json request: ${raw.request.method}`)
+        if (raw.request.method === "initialized" || raw.request.method === "notifications/initialized") {
+          log("received initialized notification")
+        } else {
+          handleRequest(raw.request)
+        }
+        continue
       }
-      expectedLength = parseInt(match[1], 10)
-      buffer = buffer.slice(headerEnd + 4)
-      log(`expecting body length: ${expectedLength}`)
     }
 
     if (Buffer.byteLength(buffer) < expectedLength) {
