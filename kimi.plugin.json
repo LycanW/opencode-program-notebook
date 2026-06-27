@@ -8,7 +8,8 @@
   },
   "mcpServers": {
     "program-notebook": {
-      "command": "./bin/check-notebook-mcp.ts"
+      "command": "bun",
+      "args": ["./bin/check-notebook-mcp.ts"]
     }
   },
   "interface": {

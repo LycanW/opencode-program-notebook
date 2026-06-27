@@ -8,6 +8,10 @@ function send(message: unknown) {
   process.stdout.write(header + json)
 }
 
+function log(message: string) {
+  console.error(`[program-notebook-mcp] ${message}`)
+}
+
 function handleRequest(request: any) {
   const { id, method, params } = request
 
@@ -21,6 +25,11 @@ function handleRequest(request: any) {
         serverInfo: { name: "program-notebook", version: "0.1.0" },
       },
     })
+    return
+  }
+
+  if (method === "ping") {
+    send({ jsonrpc: "2.0", id, result: {} })
     return
   }
 
@@ -51,6 +60,7 @@ function handleRequest(request: any) {
 
   if (method === "tools/call") {
     const projectRoot = resolve(params.arguments?.projectRoot || process.cwd())
+    log(`checking projectRoot: ${projectRoot}`)
     try {
       const report = buildNotebookReport(projectRoot, new Set())
       const output = formatNotebookReport(report, new Set())
@@ -62,6 +72,7 @@ function handleRequest(request: any) {
         },
       })
     } catch (error) {
+      log(`check failed: ${error instanceof Error ? error.message : String(error)}`)
       send({
         jsonrpc: "2.0",
         id,
@@ -76,6 +87,8 @@ function handleRequest(request: any) {
 
   send({ jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${method}` } })
 }
+
+log("mcp server started")
 
 let buffer = ""
 let expectedLength: number | null = null
@@ -102,7 +115,9 @@ process.stdin.on("data", (chunk: Buffer) => {
 
     try {
       const request = JSON.parse(json)
-      if (request.method !== "initialized") {
+      if (request.method === "initialized" || request.method === "notifications/initialized") {
+        log("received initialized notification")
+      } else {
         handleRequest(request)
       }
     } catch {
