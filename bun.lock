@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "opencode-program-notebook",
+      "name": "program-notebook",
       "dependencies": {
         "@opencode-ai/plugin": "1.16.0",
       },

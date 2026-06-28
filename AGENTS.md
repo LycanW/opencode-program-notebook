@@ -69,7 +69,7 @@ bun run check-notebook
 
 1. 优先让用户复制 README 中的 `Fetch and follow instructions...` 提示给 agent。
 2. 或直接按 `.opencode/INSTALL.md` 执行安装。
-3. 克隆仓库到稳定目录，例如 `~/.config/opencode-program-notebook`。
+3. 克隆仓库到稳定目录，例如 `~/.config/program-notebook`。
 4. 在 OpenCode 配置 `plugin` 数组加入插件入口的绝对 `file://` URL。
 5. 复制 `.opencode/commands/check-notebook.md` 到 `~/.config/opencode/commands/` 或项目 `.opencode/commands/`。
 6. 运行验证命令。
@@ -79,16 +79,16 @@ bun run check-notebook
 
 1. 让用户复制 README 中的 Kimi Code 安装提示给 agent。
 2. 或直接按 `.kimi/INSTALL.md` 执行安装。
-3. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/opencode-program-notebook` 安装 plugin。
+3. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/program-notebook` 安装 plugin。
 4. 提醒用户运行 `/reload` 或开启新会话，使 plugin 生效。
 5. 验证 `check_notebook` 工具可用。
 
 ## OpenCode 全局自动部署步骤
 
 1. 确认 `~/.config/opencode` 存在；不存在则创建。
-2. 克隆或更新仓库：`https://github.com/LycanW/opencode-program-notebook.git`。
-3. 推荐克隆路径：`~/.config/opencode-program-notebook`。
-4. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 的 `plugin` 数组中加入绝对 `file://` URL，例如 `file:///home/USER/.config/opencode-program-notebook/.opencode/plugins/program-notebook.ts`。
+2. 克隆或更新仓库：`https://github.com/LycanW/program-notebook.git`。
+3. 推荐克隆路径：`~/.config/program-notebook`。
+4. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 的 `plugin` 数组中加入绝对 `file://` URL，例如 `file:///home/USER/.config/program-notebook/.opencode/plugins/program-notebook.ts`。
 5. 如果配置文件不存在，创建带 `$schema` 的最小配置。
 6. 如果配置已有 `plugin` 数组，只追加插件路径，不覆盖用户已有插件。
 7. 如果已有相同插件路径，不要重复添加。
@@ -100,8 +100,8 @@ bun run check-notebook
 
 ## OpenCode 项目级自动部署步骤
 
-1. 把仓库克隆到项目内稳定目录，例如 `tools/opencode-program-notebook`。
-2. 在项目 `.opencode/opencode.json` 中加入相对插件路径，例如 `./tools/opencode-program-notebook/.opencode/plugins/program-notebook.ts`。
+1. 把仓库克隆到项目内稳定目录，例如 `tools/program-notebook`。
+2. 在项目 `.opencode/opencode.json` 中加入相对插件路径，例如 `./tools/program-notebook/.opencode/plugins/program-notebook.ts`。
 3. 如果项目需要 slash command，复制命令文件到 `.opencode/commands/check-notebook.md`。
 4. 在克隆目录运行验证命令。
 5. 提醒用户从项目目录重启 OpenCode。
@@ -109,7 +109,7 @@ bun run check-notebook
 ## Kimi Code 全局自动部署步骤
 
 1. 确认 `bun` 已安装；未安装时提示用户安装。
-2. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/opencode-program-notebook`。
+2. 在 Kimi Code 中运行 `/plugins install https://github.com/LycanW/program-notebook`。
 3. 提醒用户运行 `/reload` 或开启新会话。
 4. 调用 `check_notebook` 工具验证可用性。
 5. 不要覆盖用户已有配置、skill、plugin 或代理指南。

@@ -1,4 +1,4 @@
-# opencode-program-notebook
+# program-notebook
 
 OpenCode 与 Kimi Code 的 Program Notebook 插件、skill 和命令包。
 
@@ -11,7 +11,7 @@ OpenCode 与 Kimi Code 的 Program Notebook 插件、skill 和命令包。
 把下面这段复制给你的 agent：
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/opencode-program-notebook/refs/heads/main/.opencode/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/program-notebook/refs/heads/main/.opencode/INSTALL.md
 ```
 
 ### Kimi Code
@@ -19,7 +19,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/open
 把下面这段复制给你的 agent：
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/opencode-program-notebook/refs/heads/main/.kimi/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/program-notebook/refs/heads/main/.kimi/INSTALL.md
 ```
 
 ## 包含内容
@@ -60,7 +60,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/open
 1. 克隆仓库到稳定位置：
 
 ```bash
-git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/opencode-program-notebook
+git clone https://github.com/LycanW/program-notebook.git ~/.config/program-notebook
 ```
 
 2. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 中加入插件路径：
@@ -69,7 +69,7 @@ git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/open
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "file:///home/YOUR_USER/.config/opencode-program-notebook/.opencode/plugins/program-notebook.ts"
+    "file:///home/YOUR_USER/.config/program-notebook/.opencode/plugins/program-notebook.ts"
   ]
 }
 ```
@@ -78,7 +78,7 @@ git clone https://github.com/LycanW/opencode-program-notebook.git ~/.config/open
 
 ```bash
 mkdir -p ~/.config/opencode/commands
-cp ~/.config/opencode-program-notebook/.opencode/commands/check-notebook.md ~/.config/opencode/commands/check-notebook.md
+cp ~/.config/program-notebook/.opencode/commands/check-notebook.md ~/.config/opencode/commands/check-notebook.md
 ```
 
 4. 重启 OpenCode。OpenCode 不会热重载插件、skill 或命令。
@@ -88,7 +88,7 @@ cp ~/.config/opencode-program-notebook/.opencode/commands/check-notebook.md ~/.c
 1. 在 Kimi Code 中安装 plugin：
 
 ```text
-/plugins install https://github.com/LycanW/opencode-program-notebook
+/plugins install https://github.com/LycanW/program-notebook
 ```
 
 2. 运行 `/reload` 或开启新会话，使 plugin 生效。
