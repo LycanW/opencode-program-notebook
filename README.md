@@ -57,31 +57,25 @@ Fetch and follow instructions from https://raw.githubusercontent.com/LycanW/prog
 
 ### OpenCode
 
-1. 克隆仓库到稳定位置：
-
-```bash
-git clone https://github.com/LycanW/program-notebook.git ~/.config/program-notebook
-```
-
-2. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 中加入插件路径：
+1. 在 `~/.config/opencode/opencode.jsonc` 或 `~/.config/opencode/opencode.json` 中加入 npm 包名：
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    "file:///home/YOUR_USER/.config/program-notebook/.opencode/plugins/program-notebook.ts"
-  ]
+  "plugin": ["program-notebook"]
 }
 ```
 
-3. 如需 `/check-notebook` 命令，复制命令文件：
+2. 如需 `/check-notebook` 命令，复制命令模板：
 
 ```bash
 mkdir -p ~/.config/opencode/commands
 cp ~/.config/program-notebook/.opencode/commands/check-notebook.md ~/.config/opencode/commands/check-notebook.md
 ```
 
-4. 重启 OpenCode。OpenCode 不会热重载插件、skill 或命令。
+> 命令模板可从 [GitHub 仓库](https://github.com/LycanW/program-notebook/blob/main/.opencode/commands/check-notebook.md) 直接下载。
+
+3. 重启 OpenCode。OpenCode 不会热重载配置、插件、skill 或命令。
 
 ### Kimi Code
 
